@@ -25,7 +25,7 @@ router.get('/login', function(req, res, next) {
   res.send("loginroutern");
 });
 
-router.post('/', function(req, res, next) {
+router.post('/add', function(req, res, next) {
 
   let newUser = req.body;
   newUser.id = users.length + 1;
