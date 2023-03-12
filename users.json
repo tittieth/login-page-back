@@ -1,22 +1,22 @@
 [
   {
-    "userId": 1,
     "userName": "Janne",
-    "password": "test"
-  },
-  {
-    "userId": 2,
-    "userName": "Tittie",
-    "password": "sol"
-  },
-  {
-    "userId": 3,
-    "userName": "Levi",
-    "password": "fotboll"
-  },
-  {
-    "userName": "Diesel",
     "password": "test",
-    "id": 4
+    "userId": 1
+  },
+  {
+    "userName": "Tittie",
+    "password": "sol",
+    "userId": 2
+  },
+  {
+    "userName": "Levi",
+    "password": "fotboll",
+    "userId": 3
+  },
+  {
+    "userName": "emma",
+    "password": "test",
+    "userId": 4
   }
 ]

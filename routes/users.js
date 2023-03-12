@@ -29,9 +29,9 @@ router.post('/add', function(req, res, next) {
         console.log("Filen finns inte");
 
         let users = [{
-          "userId":1,
           "userName":"Janne",
-          "password":"test"
+          "password":"test",
+          "userId":1
         }];
 
         fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
@@ -49,7 +49,7 @@ router.post('/add', function(req, res, next) {
     const users = JSON.parse(data);
 
     let newUser = req.body;
-    newUser.id = users.length + 1;
+    newUser.userId = users.length + 1;
     users.push(newUser);
     console.log(newUser);
 
