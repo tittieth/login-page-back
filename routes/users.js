@@ -1,24 +1,17 @@
 var express = require('express');
 var router = express.Router();
-
-let users = [
-  {
-  "userId":1,
-  "userName":"Janne",
-  "password":"test"
-},{
-  "userId":2,
-  "userName":"Tittie",
-  "password":"sol"
-},{
-  "userId":3,
-  "userName":"Levi",
-  "password":"fotboll"
-}]
+const fs = require("fs");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.json(users);
+  fs.readFile("users.json", function(err, data){
+    if(err) {
+      console.log(err)
+    }
+    res.send(data)
+    return;
+  }
+  )
 });
 
 router.get('/login', function(req, res, next) {
@@ -27,24 +20,65 @@ router.get('/login', function(req, res, next) {
 
 router.post('/add', function(req, res, next) {
 
-  let newUser = req.body;
-  newUser.id = users.length + 1;
-  users.push(newUser);
-  console.log(newUser);
+  console.log(req.body);
+  fs.readFile("users.json", function(err, data) {
+    if (err) {
+      console.log(err);
 
-  res.json(users);
+      if (err.code == "ENOENT") {
+        console.log("Filen finns inte");
+
+        let users = [{
+          "userId":1,
+          "userName":"Janne",
+          "password":"test"
+        }];
+
+        fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
+          if (err) {
+            console.log(err);
+          }
+        }) 
+
+        res.send("Fil skapad och ny användare sparad");
+        return;
+      }
+      res.send("404 - något gick fel!")
+    }
+
+    const users = JSON.parse(data);
+
+    let newUser = req.body;
+    newUser.id = users.length + 1;
+    users.push(newUser);
+    console.log(newUser);
+
+    fs.writeFile("users.json", JSON.stringify(users, null, 2), function(err) {
+      if (err) {
+        console.log(err);
+      }
+    })
+    res.json(users);
+  });
 });
 
 router.post('/login', function(req, res, next) {
   const { name, password } = req.body;
-  const foundUser = users.find(user => user.userName === name);
+  fs.readFile("users.json", function(err, data){
+    if(err) {
+      console.log(err)
+    }
+    let users = JSON.parse(data);
+    const foundUser = users.find(user => user.userName === name);
 
-  if(password === foundUser.password) {
-    res.status(201).json({name: foundUser.userName, id: foundUser.userId})
-  }
-  else {
-    res.status(401).json("Incorrect password or username")
-  }
+    if(password === foundUser.password) {
+      res.status(201).json({name: foundUser.userName, id: foundUser.userId})
+    }
+    else {
+      res.status(401).json("Incorrect password or username")
+    }
+    return;
+  })
 });
 
 module.exports = router;
